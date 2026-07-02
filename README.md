@@ -2,7 +2,7 @@
 
 ## What it is
 
-A skill pack that turns your team's resume(s) and a hackathon's rules into scored, pitch-ready hackathon ideas. It reads your team's skills, the required sponsor tech, and the judging criteria, generates candidate ideas using three TRIZ-based idea operators, ranks them with a 100-point judging rubric, and runs in a loop until you settle on an idea you want to build.
+A skill pack that turns your team's resume(s) and a hackathon's rules into scored, pitch-ready hackathon ideas. It reads your team's skills, the required sponsor tech, and the judging criteria, generates candidate ideas, ranks them with a 100-point judging rubric, and runs in a loop until you settle on an idea you want to build.
 
 ## Install
 
@@ -34,7 +34,7 @@ Add `.drl/` to your project's `.gitignore`.
 ## Pipeline
 
 1. **Ingestion** — read the team resume(s), hackathon rules, and judging criteria; build an inputs digest of team skills, required sponsor tech, and scoring criteria.
-2. **Generation** — produce 9–15 idea candidates by applying three TRIZ operators: asset removal, actor substitution, and constraint-into-product.
+2. **Generation** — produce 9–15 idea candidates by applying three operators: asset removal, actor substitution, and constraint-into-product.
 3. **Scoring** — rank every candidate against the 100-point win-hackathon rubric (hard gates + weighted criteria).
 4. **Presentation** — present the top 3 as investor-style pitches.
 5. **Feedback loop** — take your feedback, regenerate and re-score, and repeat until you settle on an idea.

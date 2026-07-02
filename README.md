@@ -11,7 +11,7 @@ Clone the pack into your agent's skills directory.
 Claude Code:
 
 ```sh
-git clone https://github.com/dynamicresonance/dynamic-resonance-lite ~/.claude/skills/dynamic-resonance-lite
+git clone https://github.com/DynamicResonance/dynamic-resonance-lite ~/.claude/skills/dynamic-resonance-lite
 ```
 
 For Cursor or other agents, clone the folder into that agent's respective skills directory. The pack uses only universal `SKILL.md` features (`name` + `description` frontmatter plus a markdown body), so it works across any agent that supports skills.

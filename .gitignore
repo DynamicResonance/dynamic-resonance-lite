@@ -1,0 +1,7 @@
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Source materials — internal adaptation inputs, must not ship in the public repo
+source-materials/

@@ -42,7 +42,11 @@ The user has ideally dropped files into the project folder already.
    any combination works — file paths, a folder to scan, pasted text, or a URL to the hackathon page.
    If the user just says "look in the folder," list the project files (excluding `.drl/` and hidden
    directories), infer which file is which input, and confirm your mapping with the user before reading.
-2. **Handle missing inputs:** One input file may satisfy several roles at once — e.g. a hackathon
+2. **Fun-facts mode (optional).** Ask the user one extra yes/no question, exactly: "Use fun facts?
+   (mixes ~20 recent high-resonance news items into idea generation as creative fuel)". Record the
+   answer in `inputs.md` under a new section `## Fun-facts mode` (on/off). Default is off if the user
+   skips the question.
+3. **Handle missing inputs:** One input file may satisfy several roles at once — e.g. a hackathon
    rules page that embeds the judging criteria counts as both (b) and (c). Treat an input as missing
    only if it appears in none of the provided materials.
    - No resume → instead ask 3–4 quick questions about the team: core skills, notable past projects,
@@ -51,17 +55,18 @@ The user has ideally dropped files into the project folder already.
      be used.
    - No sponsor / tech requirements → ask whether the hackathon is tech-agnostic. If it is, note that
      sponsor-centrality logic will be skipped downstream.
-3. **Invite precision.** In one friendly line, tell the user that the more precisely the team
+4. **Invite precision.** In one friendly line, tell the user that the more precisely the team
    describes itself, the sharper the generated ideas will be. Offer to accept any extra context —
    interests, constraints, and especially what they do NOT want to build.
-4. **Distill into `.drl/inputs.md`** with these sections. Distill, don't copy — but preserve concrete
+5. **Distill into `.drl/inputs.md`** with these sections. Distill, don't copy — but preserve concrete
    facts and numbers:
    - `## Team` — skills, notable experience, size, stack strengths
    - `## Sponsor tech / required stack` — each item plus what it actually does
    - `## Judging criteria` — the hackathon's real criteria if provided, else "default rubric"
    - `## Constraints` — time window, team-size limit, submission requirements
    - `## Extra context` — anything else the user offered
-5. **Confirm.** Show the digest to the user for a quick confirm/correct before proceeding.
+   - `## Fun-facts mode` — on/off (default off)
+6. **Confirm.** Show the digest to the user for a quick confirm/correct before proceeding.
 
 ---
 
@@ -95,12 +100,23 @@ The user has ideally dropped files into the project folder already.
      wild in concept, small in build.
    Announce the level to the user in one casual line when it rises (e.g. "Round 3, none clicked so far
    — turning up the wildness.").
-4. For each of the three operators, **in sequence**: read the operator file
+4. **Fun-facts injection.** If `inputs.md` says fun-facts mode is ON: read `facts/fun-facts.md`. For
+   each operator batch, at least 2 of its cards must each draw on exactly ONE entry from the base —
+   using the fact as resonant context: the "why now", the source of urgency for the problem, or the
+   analogy/mechanism the idea transplants. The fact works as a lens, not a decoration: if removing the
+   fact from the card's mechanics changes nothing, it doesn't count. Each such card adds a field to
+   `operator_fields`: `fun_fact_used: <FF-id> — <how it shaped the idea, one line>`. Cards not using a
+   fact set `fun_fact_used: none`. Spread facts across cards — never reuse the same FF entry more than
+   twice per iteration. On wildness LEVEL 1+, prefer facts from domains absent from `inputs.md`; on
+   LEVEL 2, at least one card per operator must transplant a mechanism from a fact in an unrelated
+   industry.
+   If fun-facts mode is OFF, skip this step entirely and set no `fun_fact_used` fields.
+5. For each of the three operators, **in sequence**: read the operator file
    (`operators/asset-removal.md`, then `operators/actor-substitution.md`, then
    `operators/constraint-into-product.md`), follow its instructions, and generate **3–5 idea
    candidates** through that operator's lens. Never more than 5 per operator — beyond 5 the ideas
    start repeating.
-5. Write every candidate in the standard **IDEA CARD** format (defined here; the operators reference
+6. Write every candidate in the standard **IDEA CARD** format (defined here; the operators reference
    it):
    - `id`: `NN-<operator-shortname>-<k>` — operator shortnames are `asset`, `actor`, `constraint`
      (e.g. `01-asset-1`)
@@ -116,12 +132,12 @@ The user has ideally dropped files into the project folder already.
    - `operator_fields`: each operator defines 2–4 additional required fields of its own (declared in
      the operator file) — e.g. `removed_atom`, `substituted_actor`, `turned_constraint`,
      `expected_discontinuity`. Include them exactly as the operator specifies.
-6. **Reversion guard.** Each operator file defines what makes a candidate "reverted" — a faster-horse
+7. **Reversion guard.** Each operator file defines what makes a candidate "reverted" — a faster-horse
    that undid the operator's move. After generating each operator's batch, check every candidate against
    that operator's reversion rule using its declared `operator_fields`. Discard reverted candidates and
    regenerate replacements until the batch holds 3–5 non-reverted ideas. Log discarded ones with a
    one-line reason at the bottom of `candidates.md` under `## Reverted (discarded)`.
-7. Write all candidates to `.drl/iteration-NN/candidates.md`. Do **not** dump every candidate into the
+8. Write all candidates to `.drl/iteration-NN/candidates.md`. Do **not** dump every candidate into the
    conversation — it's too long. Tell the user how many were generated per operator, then proceed to
    scoring.
 
@@ -148,7 +164,9 @@ The user has ideally dropped files into the project folder already.
 2. For each of the top 3, produce the full pitch block per that template: Pitch one-liner, Problem,
    Solution, How it Works, Impact.
 3. Write the three blocks to `.drl/iteration-NN/top3.md` AND present them to the user as plain text in
-   the conversation, clearly numbered 1 / 2 / 3, each with its rubric score.
+   the conversation, clearly numbered 1 / 2 / 3, each with its rubric score. When a top-3 idea has a
+   `fun_fact_used` value other than `none`, add one short line under its pitch block: "Riffs on: <fact
+   short title>".
 4. **Recommendation footer.** After the three pitch blocks, append a short "To get better ideas next
    round:" footer with 1-2 concrete, personalized recommendations for improving the INPUTS — derived
    from actual weak spots you observed in `inputs.md` and in this round's scoring. Pick only what
@@ -200,3 +218,6 @@ The user has ideally dropped files into the project folder already.
   "read the file," "ask the user," "write to `.drl/`."
 - Wildness levels change how far generation explores; they never relax hard gates, reversion rules, or
   buildability.
+- Fun facts are creative fuel, never claims: a pitch may reference the news item as context, but all
+  Problem/Solution/Impact numbers still follow the estimate-framing rules and must not present the
+  fact's projections as the product's own results.

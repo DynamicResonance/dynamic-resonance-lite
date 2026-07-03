@@ -25,6 +25,10 @@ For Cursor or other agents, clone the folder into that agent's respective skills
 
 If no judging criteria are provided, the built-in rubric is used.
 
+### Fun-facts mode (experimental)
+
+At ingestion the skill asks an optional 4th question — whether to enable fun-facts mode. When on, it mixes a curated base of ~20 recent high-resonance news items (AI/tech, science/medicine, energy/climate, culture/sports) into generation as creative lenses: some idea cards are required to riff on the *shift* a news item implies rather than copy it. The base lives in `facts/fun-facts.md` and is manually curated — refresh it regularly to keep the items current. Mode is off by default.
+
 ## Session state
 
 The skill writes all working state to a `.drl/` directory in the current project — the inputs digest, the generated ideas for each iteration, and the feedback history. Each hackathon project keeps its own isolated session, so you can stop and resume anytime.

@@ -75,12 +75,32 @@ The user has ideally dropped files into the project folder already.
    ideas the user rejected.** "Rejected" means ideas the user explicitly turned down or criticized —
    not merely unselected candidates from previous iterations; those may return (improved) if feedback
    or scoring points at them.
-3. For each of the three operators, **in sequence**: read the operator file
+3. **Wildness level.** Determine this iteration's wildness before generating:
+   - Iterations 1-2: LEVEL 0 (standard) — operators as written.
+   - Iteration 3, if reached via Reroll or via Iterate-feedback expressing dissatisfaction with the
+     whole direction (rather than refining a liked idea): LEVEL 1 (bold).
+   - Iteration 4+ under the same conditions: LEVEL 2 (wild). Each further reroll stays at LEVEL 2 but
+     must explore a previously untouched domain.
+   - If the user is refining a liked idea (normal Iterate), wildness stays at LEVEL 0 regardless of
+     iteration number.
+   Level effects, applied ON TOP of each operator's instructions (never overriding its hard rules or
+   reversion guard):
+   - LEVEL 1 (bold): ban the two most obvious moves per operator (the ones a naive run would produce
+     first); require each card to draw on at least one domain, actor, or mechanism NOT mentioned in
+     `inputs.md`; prefer candidates that would score 14/15 on originality over safe 10s.
+   - LEVEL 2 (wild): additionally require cross-domain transplants (mechanism from an unrelated
+     industry applied here), aggressive temporal projection (the operator's world in ~3 years), and at
+     least one card per operator that feels borderline-unreasonable but still passes the hard gates.
+     Buildability discipline stays: every card must still honestly pass the 4-6h buildability gate —
+     wild in concept, small in build.
+   Announce the level to the user in one casual line when it rises (e.g. "Round 3, none clicked so far
+   — turning up the wildness.").
+4. For each of the three operators, **in sequence**: read the operator file
    (`operators/asset-removal.md`, then `operators/actor-substitution.md`, then
    `operators/constraint-into-product.md`), follow its instructions, and generate **3–5 idea
    candidates** through that operator's lens. Never more than 5 per operator — beyond 5 the ideas
    start repeating.
-4. Write every candidate in the standard **IDEA CARD** format (defined here; the operators reference
+5. Write every candidate in the standard **IDEA CARD** format (defined here; the operators reference
    it):
    - `id`: `NN-<operator-shortname>-<k>` — operator shortnames are `asset`, `actor`, `constraint`
      (e.g. `01-asset-1`)
@@ -96,12 +116,12 @@ The user has ideally dropped files into the project folder already.
    - `operator_fields`: each operator defines 2–4 additional required fields of its own (declared in
      the operator file) — e.g. `removed_atom`, `substituted_actor`, `turned_constraint`,
      `expected_discontinuity`. Include them exactly as the operator specifies.
-5. **Reversion guard.** Each operator file defines what makes a candidate "reverted" — a faster-horse
+6. **Reversion guard.** Each operator file defines what makes a candidate "reverted" — a faster-horse
    that undid the operator's move. After generating each operator's batch, check every candidate against
    that operator's reversion rule using its declared `operator_fields`. Discard reverted candidates and
    regenerate replacements until the batch holds 3–5 non-reverted ideas. Log discarded ones with a
    one-line reason at the bottom of `candidates.md` under `## Reverted (discarded)`.
-6. Write all candidates to `.drl/iteration-NN/candidates.md`. Do **not** dump every candidate into the
+7. Write all candidates to `.drl/iteration-NN/candidates.md`. Do **not** dump every candidate into the
    conversation — it's too long. Tell the user how many were generated per operator, then proceed to
    scoring.
 
@@ -129,7 +149,22 @@ The user has ideally dropped files into the project folder already.
    Solution, How it Works, Impact.
 3. Write the three blocks to `.drl/iteration-NN/top3.md` AND present them to the user as plain text in
    the conversation, clearly numbered 1 / 2 / 3, each with its rubric score.
-4. Keep it tight: each idea's block stays within the pitch template's word budget. No tables.
+4. **Recommendation footer.** After the three pitch blocks, append a short "To get better ideas next
+   round:" footer with 1-2 concrete, personalized recommendations for improving the INPUTS — derived
+   from actual weak spots you observed in `inputs.md` and in this round's scoring. Pick only what
+   genuinely applies, e.g.:
+   - team gaps: a missing skill that kept blocking high-scoring directions ("several strong candidates
+     died on frontend polish — a designer or one more frontend hand would unlock them");
+   - missing judging detail: if scoring fell back to the default rubric, suggest hunting for the
+     hackathon's real scoring breakdown, past winners, or the organizers' previous events;
+   - thin team description: if the resume digest was sparse, name the 1-2 facts that would sharpen
+     generation most (past projects, strongest stack, domain expertise);
+   - missing sponsor-tech detail: if `sponsor_tech_role` kept being generic, suggest linking the
+     sponsor SDK's docs page or listing its 2-3 concrete capabilities.
+   Each recommendation must say WHAT to add and WHY it will improve the next round (one line each). If
+   inputs are genuinely complete, say so in one line instead of inventing recommendations.
+5. Keep it tight: each idea's block stays within the pitch template's word budget. No tables; the
+   footer adds at most 3 short lines.
 
 ---
 
@@ -138,8 +173,9 @@ The user has ideally dropped files into the project folder already.
 1. After presenting, **always** explicitly offer these three options — never leave the next step
    implicit:
    - **(a) Settle** — pick one idea and finish.
-   - **(b) Iterate** — give feedback on any of the ideas (what to change, merge, or push further),
-     which seeds a new generation loop.
+   - **(b) Iterate** — give feedback on any of the ideas (what to change, merge, or push further), or
+     add new information/files in response to the footer; either seeds a new generation loop and counts
+     as Iterate feedback.
    - **(c) Reroll** — none fit; optionally say what direction to explore, triggering a full new
      generation round.
 2. **If Settle:** write `.drl/winner.md` containing the chosen idea's full pitch block, its idea card,
@@ -162,3 +198,5 @@ The user has ideally dropped files into the project folder already.
 - Everything user-facing is concise. The `.drl/` files carry the detail.
 - The user may be on Claude Code, Cursor, or another agent. Never reference agent-specific tools — say
   "read the file," "ask the user," "write to `.drl/`."
+- Wildness levels change how far generation explores; they never relax hard gates, reversion rules, or
+  buildability.

@@ -16,6 +16,12 @@ all up front. The sub-files are: `operators/asset-removal.md`, `operators/actor-
 `.drl/` directory in the current project folder. Keep everything you say to the user concise; the
 `.drl/` files carry the detail. See **Boundaries** at the end before you begin.
 
+**Asking the user.** Whenever you ask the user to choose between defined options (resume/archive,
+confirm mapping, settle/iterate/reroll, yes/no), present them as selectable options if your environment
+supports presenting choices; otherwise ask in plain text. Group related questions into ONE interaction
+— never a separate turn per question. Keep free-text questions (like "point me at your files")
+conversational.
+
 ---
 
 ## Phase 0 — Session check
@@ -26,6 +32,7 @@ all up front. The sub-files are: `operators/asset-removal.md`, `operators/actor-
    generated, and whether a winner was chosen — then ask the user to choose:
    - **Resume** this session (continue where it left off), or
    - **Archive** it (rename `.drl/` to `.drl-archive-<today's date>/`) and start fresh.
+   — present Resume/Archive as two selectable options where supported.
 3. If `.drl/` does not exist, create it and proceed to Phase 1.
 
 Do not read iteration contents in bulk here — read just enough to summarize.
@@ -37,15 +44,18 @@ Do not read iteration contents in bulk here — read just enough to summarize.
 Goal: collect three inputs — the team, the hackathon rules / required tech, and the judging criteria.
 The user has ideally dropped files into the project folder already.
 
-1. **Ask for the inputs.** Ask the user to point at their files for: (a) team resume(s),
-   (b) hackathon rules / required sponsor tech, (c) judging criteria. Make clear that any format and
-   any combination works — file paths, a folder to scan, pasted text, or a URL to the hackathon page.
-   If the user just says "look in the folder," list the project files (excluding `.drl/` and hidden
-   directories), infer which file is which input, and confirm your mapping with the user before reading.
-   End that SAME message with one extra optional line, exactly: "Optional: use fun facts? (yes/no —
-   mixes ~20 recent high-resonance news items into idea generation as creative fuel; default off)". One
-   message asks all four things and expects a single reply; record the fun-facts answer in `inputs.md`
-   under `## Fun-facts mode` (on/off), defaulting to off if the user doesn't address it.
+1. **Ask for the inputs.** Ask in ONE interaction: (i) a short conversational line asking the user to
+   point at their input files — (a) team resume(s), (b) hackathon rules / required sponsor tech,
+   (c) judging criteria — or to say "look in the folder"; (ii) alongside it, the fun-facts yes/no as a
+   selectable option where supported (default off; it mixes ~20 recent high-resonance news items into
+   idea generation as creative fuel). Keep the total message short — details like accepted formats
+   (file paths, a folder to scan, pasted text, or a URL to the hackathon page) belong in one compact
+   line, not paragraphs. Record the fun-facts answer in `inputs.md` under `## Fun-facts mode` (on/off),
+   defaulting to off if the user doesn't address it.
+   If the user says "look in the folder," list the project files (excluding `.drl/` and hidden
+   directories), infer which file is which input, then present the mapping and ask for confirmation as
+   selectable options where supported: "Mapping correct" / "Let me correct it", with the fun-facts
+   yes/no included in the same interaction if still unanswered. Confirm the mapping before reading.
 2. **Handle missing inputs:** One input file may satisfy several roles at once — e.g. a hackathon
    rules page that embeds the judging criteria counts as both (b) and (c). Treat an input as missing
    only if it appears in none of the provided materials.
@@ -200,6 +210,8 @@ The user has ideally dropped files into the project folder already.
      as Iterate feedback.
    - **(c) Reroll** — none fit; optionally say what direction to explore, triggering a full new
      generation round.
+   — present Settle / Iterate / Reroll as three selectable options where supported (feedback text can
+   accompany Iterate/Reroll).
 2. **If Settle:** write `.drl/winner.md` containing the chosen idea's full pitch block, its idea card,
    and a short `## Next steps at the hackathon` section — what to build first in hours 0–2, 2–4, and
    4–6, derived from its `build_sketch`. Congratulate briefly and end.

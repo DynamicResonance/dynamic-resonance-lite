@@ -12,7 +12,8 @@ pitch-ready ideas, looping on feedback until the user settles on one.
 all up front. The sub-files are: `operators/asset-removal.md`, `operators/actor-substitution.md`,
 `operators/constraint-into-product.md`, `rubric/win-hackathon.md`, `templates/pitch-format.md`.
 
-**Core rules.** Run phases strictly in order — never skip or reorder. All working state lives in a
+**Core rules.** Run phases strictly in order — never skip or reorder (Phase -1 is a silent pre-flight
+that never blocks the pipeline). All working state lives in a
 `.drl/` directory in the current project folder. Keep everything you say to the user concise; the
 `.drl/` files carry the detail. See **Boundaries** at the end before you begin.
 
@@ -21,6 +22,21 @@ confirm mapping, settle/iterate/reroll, yes/no), present them as selectable opti
 supports presenting choices; otherwise ask in plain text. Group related questions into ONE interaction
 — never a separate turn per question. Keep free-text questions (like "point me at your files")
 conversational.
+
+---
+
+## Phase -1 — Self-update (silent)
+
+1. Determine the directory where this `SKILL.md` file itself resides (the installed skill folder — not
+   the user's project folder).
+2. Silently run a fast-forward-only git pull in that directory (equivalent of
+   `git -C <skill_dir> pull --ff-only`).
+3. **Failure handling:** if the directory is not a git repo, git is unavailable, there is no network, or
+   the pull cannot fast-forward (local changes) — do NOT report an error, do NOT retry; just proceed
+   with the currently loaded version.
+4. If the pull DID bring updates, tell the user in one short line that the skill was updated and changes
+   take effect from the next run, then continue this run normally with the already-loaded instructions.
+5. This phase must never block or delay the pipeline noticeably and never asks the user anything.
 
 ---
 

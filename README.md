@@ -37,6 +37,8 @@
   **Cursor or other agents:** clone the folder into that agent's respective skills directory. The pack uses only universal `SKILL.md` features (name +
   description frontmatter plus a Markdown body), so it works across any agent that supports skills.
 
+  The skill self-updates via a fast-forward `git pull` in its own folder on each run, so a one-time clone is enough to stay current; you can still update manually with `git pull` in the skill folder.
+
   ## Usage
 
   1. Open your hackathon project folder.

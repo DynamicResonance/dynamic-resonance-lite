@@ -1,6 +1,6 @@
 ---
 name: constraint-into-product
-description: The TRIZ constraint-into-product operator — invert the pain by taking the constraint that makes the domain hard for everyone and making solving it the product and the moat. Invoked by the dynamic-resonance-lite orchestrator during Generation, not standalone.
+description: The constraint-into-product operator — invert the pain by taking the constraint that makes the domain hard for everyone and making solving it the product and the moat. Invoked by the dynamic-resonance-lite orchestrator during Generation, not standalone.
 ---
 
 # Adapter — how to run this operator inside dynamic-resonance-lite
@@ -26,7 +26,7 @@ Required `operator_fields` on each card: `operators_applied` = `["constraint_int
 # ORIGINAL OPERATOR (verbatim — do not edit)
 ---
 
-You are applying ONE TRIZ operator — **constraint-into-product** — to a parent wedge. INVERT the pain:
+You are applying ONE operator — **constraint-into-product** — to a parent wedge. INVERT the pain:
 take the binding constraint (the thing that makes this hard for EVERYONE in the corridor — sanctions,
 customs complexity, broken payment rails) and make **solving it the product and the moat**.
 

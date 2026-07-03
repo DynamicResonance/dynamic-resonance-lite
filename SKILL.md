@@ -1,6 +1,6 @@
 ---
 name: dynamic-resonance-lite
-description: Generate winning hackathon ideas from your team's resume and the hackathon rules. Runs a full pipeline: ingests team skills + required sponsor tech + judging criteria, generates 9-15 idea candidates via three TRIZ operators (asset removal, actor substitution, constraint-into-product), scores them with a 100-point hackathon-winning rubric, presents the top 3 as investor-style pitches, and iterates on your feedback until you settle on an idea. Use whenever the user mentions a hackathon, needs project ideas for a competition, or runs /dynamic-resonance-lite.
+description: Generate winning hackathon ideas from your team's resume and the hackathon rules. Runs a full pipeline: ingests team skills + required sponsor tech + judging criteria, generates 9-15 idea candidates via three operators (asset removal, actor substitution, constraint-into-product), scores them with a 100-point hackathon-winning rubric, presents the top 3 as investor-style pitches, and iterates on your feedback until you settle on an idea. Use whenever the user mentions a hackathon, needs project ideas for a competition, or runs /dynamic-resonance-lite.
 ---
 
 # Dynamic Resonance Lite — Orchestrator
@@ -12,9 +12,31 @@ pitch-ready ideas, looping on feedback until the user settles on one.
 all up front. The sub-files are: `operators/asset-removal.md`, `operators/actor-substitution.md`,
 `operators/constraint-into-product.md`, `rubric/win-hackathon.md`, `templates/pitch-format.md`.
 
-**Core rules.** Run phases strictly in order — never skip or reorder. All working state lives in a
+**Core rules.** Run phases strictly in order — never skip or reorder (Phase -1 is a silent pre-flight
+that never blocks the pipeline). All working state lives in a
 `.drl/` directory in the current project folder. Keep everything you say to the user concise; the
 `.drl/` files carry the detail. See **Boundaries** at the end before you begin.
+
+**Asking the user.** Whenever you ask the user to choose between defined options (resume/archive,
+confirm mapping, settle/iterate/reroll, yes/no), present them as selectable options if your environment
+supports presenting choices; otherwise ask in plain text. Group related questions into ONE interaction
+— never a separate turn per question. Keep free-text questions (like "point me at your files")
+conversational.
+
+---
+
+## Phase -1 — Self-update (silent)
+
+1. Determine the directory where this `SKILL.md` file itself resides (the installed skill folder — not
+   the user's project folder).
+2. Silently run a fast-forward-only git pull in that directory (equivalent of
+   `git -C <skill_dir> pull --ff-only`).
+3. **Failure handling:** if the directory is not a git repo, git is unavailable, there is no network, or
+   the pull cannot fast-forward (local changes) — do NOT report an error, do NOT retry; just proceed
+   with the currently loaded version.
+4. If the pull DID bring updates, tell the user in one short line that the skill was updated and changes
+   take effect from the next run, then continue this run normally with the already-loaded instructions.
+5. This phase must never block or delay the pipeline noticeably and never asks the user anything.
 
 ---
 
@@ -26,6 +48,7 @@ all up front. The sub-files are: `operators/asset-removal.md`, `operators/actor-
    generated, and whether a winner was chosen — then ask the user to choose:
    - **Resume** this session (continue where it left off), or
    - **Archive** it (rename `.drl/` to `.drl-archive-<today's date>/`) and start fresh.
+   — present Resume/Archive as two selectable options where supported.
 3. If `.drl/` does not exist, create it and proceed to Phase 1.
 
 Do not read iteration contents in bulk here — read just enough to summarize.
@@ -37,11 +60,14 @@ Do not read iteration contents in bulk here — read just enough to summarize.
 Goal: collect three inputs — the team, the hackathon rules / required tech, and the judging criteria.
 The user has ideally dropped files into the project folder already.
 
-1. **Ask for the inputs.** Ask the user to point at their files for: (a) team resume(s),
-   (b) hackathon rules / required sponsor tech, (c) judging criteria. Make clear that any format and
-   any combination works — file paths, a folder to scan, pasted text, or a URL to the hackathon page.
-   If the user just says "look in the folder," list the project files (excluding `.drl/` and hidden
-   directories), infer which file is which input, and confirm your mapping with the user before reading.
+1. **Ask for the inputs.** In one short, conversational message, ask the user to point at their input
+   files — (a) team resume(s), (b) hackathon rules / required sponsor tech, (c) judging criteria — or
+   to say "look in the folder," or to paste the text. Keep it short; accepted formats (file paths, a
+   folder to scan, pasted text, or a URL to the hackathon page) fit in one compact line.
+   If the user says "look in the folder," list the project files (excluding `.drl/` and hidden
+   directories), infer which file is which input, then present the mapping and ask for confirmation as
+   selectable options where supported: "Mapping correct" / "Let me correct it". Confirm the mapping
+   before reading.
 2. **Handle missing inputs:** One input file may satisfy several roles at once — e.g. a hackathon
    rules page that embeds the judging criteria counts as both (b) and (c). Treat an input as missing
    only if it appears in none of the provided materials.
@@ -54,14 +80,34 @@ The user has ideally dropped files into the project folder already.
 3. **Invite precision.** In one friendly line, tell the user that the more precisely the team
    describes itself, the sharper the generated ideas will be. Offer to accept any extra context —
    interests, constraints, and especially what they do NOT want to build.
-4. **Distill into `.drl/inputs.md`** with these sections. Distill, don't copy — but preserve concrete
+4. **Gate before distillation.** Do not proceed to distillation until the three base inputs are each
+   either collected or explicitly resolved as missing per the missing-input rules above.
+5. **Distill into `.drl/inputs.md`** with these sections. Distill, don't copy — but preserve concrete
    facts and numbers:
    - `## Team` — skills, notable experience, size, stack strengths
    - `## Sponsor tech / required stack` — each item plus what it actually does
    - `## Judging criteria` — the hackathon's real criteria if provided, else "default rubric"
    - `## Constraints` — time window, team-size limit, submission requirements
-   - `## Extra context` — anything else the user offered
-5. **Confirm.** Show the digest to the user for a quick confirm/correct before proceeding.
+   - `## Extra context` — anything else the user offered, including explicit exclusions
+   - `## Idea lean` — direction preference (set in the sharpening round below)
+   - `## Fun-facts mode` — on/off (default off)
+6. **Sharpening questions (always).** After writing the digest and showing the quick read-back, ALWAYS
+   ask a sharpening round as ONE multi-question interaction (a multi-question form with selectable
+   options where the agent supports it; compact numbered questions in plain text otherwise). Questions,
+   each with 3–4 sensible preset options derived from the digest plus a free-text option:
+   (1) Team size & mix on the day — ALWAYS ask, even when the resume states it clearly: preset the
+   first option to the team as understood from the inputs (e.g. "2 — Alex (backend) + Maria (frontend),
+   as in the resume") so confirming takes one click, and offer options for common changes (someone
+   can't make it / extra member joining / finding teammates at the event) plus free text;
+   (2) Which direction should ideas lean, given the team's strengths (e.g. "play to our superpower:
+   <derived>", "classic crowd-pleaser for this event", "surprise me / mix");
+   (3) Anything you explicitly do NOT want to build (preset a few plausible exclusions derived from the
+   digest, plus free text);
+   (4) Use fun facts? (yes / no; default off) — include ONLY if not already answered earlier in the
+   conversation.
+   Fold the answers into `inputs.md` (team details, `## Idea lean` — new section, `## Extra context` /
+   exclusions, `## Fun-facts mode`) before the final confirmation.
+7. **Confirm.** Show the digest to the user for a quick confirm/correct before proceeding.
 
 ---
 
@@ -69,7 +115,7 @@ The user has ideally dropped files into the project folder already.
 
 1. Read `.drl/inputs.md`. Determine the current iteration number `N` — `01` if fresh; if this is a
    feedback loop, `N` = previous iteration + 1. Create `.drl/iteration-NN/` (zero-padded, e.g.
-   `iteration-01`).
+   `iteration-01`). Honor the `## Idea lean` preference when deriving each operator's parent direction.
 2. If this is iteration 2+, also read the previous iteration's `top3.md` and `feedback.md`. Treat the
    chosen/liked ideas and the user's feedback as seed material, and **explicitly avoid regenerating
    ideas the user rejected.** "Rejected" means ideas the user explicitly turned down or criticized —
@@ -95,12 +141,23 @@ The user has ideally dropped files into the project folder already.
      wild in concept, small in build.
    Announce the level to the user in one casual line when it rises (e.g. "Round 3, none clicked so far
    — turning up the wildness.").
-4. For each of the three operators, **in sequence**: read the operator file
+4. **Fun-facts injection.** If `inputs.md` says fun-facts mode is ON: read `facts/fun-facts.md`. For
+   each operator batch, at least 2 of its cards must each draw on exactly ONE entry from the base —
+   using the fact as resonant context: the "why now", the source of urgency for the problem, or the
+   analogy/mechanism the idea transplants. The fact works as a lens, not a decoration: if removing the
+   fact from the card's mechanics changes nothing, it doesn't count. Each such card adds a field to
+   `operator_fields`: `fun_fact_used: <FF-id> — <how it shaped the idea, one line>`. Cards not using a
+   fact set `fun_fact_used: none`. Spread facts across cards — never reuse the same FF entry more than
+   twice per iteration. On wildness LEVEL 1+, prefer facts from domains absent from `inputs.md`; on
+   LEVEL 2, at least one card per operator must transplant a mechanism from a fact in an unrelated
+   industry.
+   If fun-facts mode is OFF, skip this step entirely and set no `fun_fact_used` fields.
+5. For each of the three operators, **in sequence**: read the operator file
    (`operators/asset-removal.md`, then `operators/actor-substitution.md`, then
    `operators/constraint-into-product.md`), follow its instructions, and generate **3–5 idea
    candidates** through that operator's lens. Never more than 5 per operator — beyond 5 the ideas
    start repeating.
-5. Write every candidate in the standard **IDEA CARD** format (defined here; the operators reference
+6. Write every candidate in the standard **IDEA CARD** format (defined here; the operators reference
    it):
    - `id`: `NN-<operator-shortname>-<k>` — operator shortnames are `asset`, `actor`, `constraint`
      (e.g. `01-asset-1`)
@@ -116,12 +173,12 @@ The user has ideally dropped files into the project folder already.
    - `operator_fields`: each operator defines 2–4 additional required fields of its own (declared in
      the operator file) — e.g. `removed_atom`, `substituted_actor`, `turned_constraint`,
      `expected_discontinuity`. Include them exactly as the operator specifies.
-6. **Reversion guard.** Each operator file defines what makes a candidate "reverted" — a faster-horse
+7. **Reversion guard.** Each operator file defines what makes a candidate "reverted" — a faster-horse
    that undid the operator's move. After generating each operator's batch, check every candidate against
    that operator's reversion rule using its declared `operator_fields`. Discard reverted candidates and
    regenerate replacements until the batch holds 3–5 non-reverted ideas. Log discarded ones with a
    one-line reason at the bottom of `candidates.md` under `## Reverted (discarded)`.
-7. Write all candidates to `.drl/iteration-NN/candidates.md`. Do **not** dump every candidate into the
+8. Write all candidates to `.drl/iteration-NN/candidates.md`. Do **not** dump every candidate into the
    conversation — it's too long. Tell the user how many were generated per operator, then proceed to
    scoring.
 
@@ -148,7 +205,9 @@ The user has ideally dropped files into the project folder already.
 2. For each of the top 3, produce the full pitch block per that template: Pitch one-liner, Problem,
    Solution, How it Works, Impact.
 3. Write the three blocks to `.drl/iteration-NN/top3.md` AND present them to the user as plain text in
-   the conversation, clearly numbered 1 / 2 / 3, each with its rubric score.
+   the conversation, clearly numbered 1 / 2 / 3, each with its rubric score. When a top-3 idea has a
+   `fun_fact_used` value other than `none`, add one short line under its pitch block: "Riffs on: <fact
+   short title>".
 4. **Recommendation footer.** After the three pitch blocks, append a short "To get better ideas next
    round:" footer with 1-2 concrete, personalized recommendations for improving the INPUTS — derived
    from actual weak spots you observed in `inputs.md` and in this round's scoring. Pick only what
@@ -178,6 +237,8 @@ The user has ideally dropped files into the project folder already.
      as Iterate feedback.
    - **(c) Reroll** — none fit; optionally say what direction to explore, triggering a full new
      generation round.
+   — present Settle / Iterate / Reroll as three selectable options where supported (feedback text can
+   accompany Iterate/Reroll).
 2. **If Settle:** write `.drl/winner.md` containing the chosen idea's full pitch block, its idea card,
    and a short `## Next steps at the hackathon` section — what to build first in hours 0–2, 2–4, and
    4–6, derived from its `build_sketch`. Congratulate briefly and end.
@@ -200,3 +261,6 @@ The user has ideally dropped files into the project folder already.
   "read the file," "ask the user," "write to `.drl/`."
 - Wildness levels change how far generation explores; they never relax hard gates, reversion rules, or
   buildability.
+- Fun facts are creative fuel, never claims: a pitch may reference the news item as context, but all
+  Problem/Solution/Impact numbers still follow the estimate-framing rules and must not present the
+  fact's projections as the product's own results.

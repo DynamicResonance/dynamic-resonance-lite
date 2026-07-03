@@ -1,40 +1,148 @@
 # dynamic-resonance-lite
 
-## What it is
+  **Turn your team's resume and a hackathon's rules into scored, pitch-ready ideas in one command.**
 
-A skill pack that turns your team's resume(s) and a hackathon's rules into scored, pitch-ready hackathon ideas. It reads your team's skills, the required sponsor tech, and the judging criteria, generates candidate ideas, ranks them with a 100-point judging rubric, and runs in a loop until you settle on an idea you want to build.
+  Hackathons aren't won by the best code. They're won by the right idea, a jaw-drop demo, and a story judges believe. `dynamic-resonance-lite` is a
+  skill pack that does the hardest part for you: it reads your team's actual skills, the required sponsor tech, and the judging criteria, then
+  generates candidate ideas, scores every one against a 100-point win-the-hackathon rubric, presents the top 3 as investor-style pitches, and loops
+  with you until you lock the one you want to build — ending with a second-by-second demo script and an hour-by-hour build plan.
 
-## Install
+  It's a single `SKILL.md` file. No dependencies, no accounts, no code to run. Install it, drop your files in a folder, and type one command.
 
-Clone the pack into your agent's skills directory.
+  ## Who this is for
 
-Claude Code:
+  * **Hackathon builders** — solo or in a small team, who want a winning idea before the clock starts, not two hours in.
+  * **Non-engineers who ship with AI** — you can vibe-code the front end, record the demo, and pitch; the skill tells you exactly what to build and
+  who to recruit for the hard parts.
+  * **Teams preparing upfront** — walk into the kickoff with a scored shortlist and a build plan already in hand.
 
-```sh
-git clone https://github.com/DynamicResonance/dynamic-resonance-lite ~/.claude/skills/dynamic-resonance-lite
-```
+  ## Quick start
 
-For Cursor or other agents, clone the folder into that agent's respective skills directory. The pack uses only universal `SKILL.md` features (`name` + `description` frontmatter plus a markdown body), so it works across any agent that supports skills.
+  1. Install the pack (30 seconds — see below).
+  2. Open your hackathon project folder.
+  3. Drop in your inputs — team resume(s), the hackathon page/rules, and judging criteria (any format works).
+  4. Run `/dynamic-resonance-lite`.
+  5. Answer a few sharpening questions, then pick from your top 3 — or reroll for bolder ideas.
 
-## Usage
+  ## Install
 
-1. Open your hackathon project folder.
-2. Drop your input files into it — team resume(s), the hackathon page/rules, and judging criteria. Any format works.
-3. Run `/dynamic-resonance-lite`.
-4. Point the skill at your files when asked.
+  Clone the pack into your agent's skills directory.
 
-If no judging criteria are provided, the built-in rubric is used.
+  **Claude Code:**
 
-## Session state
+  ```
+  git clone https://github.com/DynamicResonance/dynamic-resonance-lite ~/.claude/skills/dynamic-resonance-lite
+  ```
 
-The skill writes all working state to a `.drl/` directory in the current project — the inputs digest, the generated ideas for each iteration, and the feedback history. Each hackathon project keeps its own isolated session, so you can stop and resume anytime.
+  **Cursor or other agents:** clone the folder into that agent's respective skills directory. The pack uses only universal `SKILL.md` features (name +
+  description frontmatter plus a Markdown body), so it works across any agent that supports skills.
 
-Add `.drl/` to your project's `.gitignore`.
+  ## Usage
 
-## Pipeline
+  1. Open your hackathon project folder.
+  2. Drop your input files into it — team resume(s), the hackathon page/rules, and judging criteria. Any format works.
+  3. Run `/dynamic-resonance-lite`.
+  4. Point the skill at your files when asked.
 
-1. **Ingestion** — read the team resume(s), hackathon rules, and judging criteria; build an inputs digest of team skills, required sponsor tech, and scoring criteria.
-2. **Generation** — produce 9–15 idea candidates by applying three operators: asset removal, actor substitution, and constraint-into-product.
-3. **Scoring** — rank every candidate against the 100-point win-hackathon rubric (hard gates + weighted criteria).
-4. **Presentation** — present the top 3 as investor-style pitches.
-5. **Feedback loop** — take your feedback, regenerate and re-score, and repeat until you settle on an idea.
+  If no judging criteria are provided, the built-in rubric is used.
+
+  ## See it work
+
+  You point the skill at a folder that already holds your resume and the hackathon spec. It maps the inputs, then asks a few sharpening questions
+  before it generates anything — team size, which way the ideas should lean, what you refuse to build, whether to use fun facts as creative fuel.
+
+  ![The skill maps your inputs and asks a few sharpening questions before generating](docs/questions-phase.png)
+
+  From there it runs the full loop:
+
+  ```
+  You:   /dynamic-resonance-lite
+  DRL:   [finds your resume + the hackathon spec in the folder, maps them]
+         [asks 4 sharpeners: team size · idea lean · exclusions · fun facts]
+
+  You:   Me + a technical teammate · Surprise me · No regulated industries · Fun facts ON
+  DRL:   [writes an inputs digest — team skills, required sponsor tech, judging frame]
+         [generates 12 candidates via 3 operators, scores them on the 100-pt rubric]
+         Your top 3:
+           1. Teach the Apprentice     — 92
+           2. Socratic Silence         — 90
+           3. Understanding, Verified  — 89
+
+  You:   Solid, but a bit obvious. I want more WOW. Reroll.
+  DRL:   [turns wildness up a level, bans the safe moves, pulls cross-domain mechanisms]
+         Your top 3:
+           1. Make Thinking Visible          — 90
+           2. Learn From Your Feed           — 89
+           3. The Textbook That Argues Back  — 89
+
+  You:   Lock in "Make Thinking Visible." I build after I know the demo — keep it to 2:30.
+  DRL:   [writes the winner plan]
+  ```
+
+  The winner file is the payoff: a staged, second-by-second demo (with a deterministic fallback so the reveal can't fail on stage), the exact teammate
+  to recruit and the stack they must know, a clean division of labor, and an hour-by-hour build split.
+
+  ![The winner plan: a second-by-second demo, exactly who to recruit, and the build split](docs/winner-plan.png)
+
+  ## The pipeline
+
+  `dynamic-resonance-lite` is a process, not a single prompt. Five phases run in order, each feeding the next:
+
+  **Ingest → Generate → Score → Pitch → Decide**
+
+  | Phase | What happens |
+  | ----- | ----- |
+  | **1. Ingestion** | Reads your team resume(s), the hackathon rules, and judging criteria. Builds an inputs digest of team skills, required sponsor
+  tech, and scoring criteria — and asks a few sharpening questions to lock the brief. |
+  | **2. Generation** | Produces 9–15 idea candidates by applying three operators — **asset removal**, **actor substitution**, and
+  **constraint-into-product** — each escaping the obvious "default" idea for your team and event. |
+  | **3. Scoring** | Ranks every candidate against a 100-point win-the-hackathon rubric — hard gates (buildable, demoable, sponsor-compliant, safe)
+  plus weighted criteria tuned to the event's real judging frame. |
+  | **4. Presentation** | Presents the top 3 as investor-style pitches — problem, solution, how it works, the demo-floor "wow" moment. |
+  | **5. Feedback loop** | Takes your feedback — push one further, merge two, add info, or reroll bolder — then regenerates and re-scores until you
+  settle on an idea. Lock one and it writes the full build-day plan. |
+
+  ### The three operators
+
+  Every idea comes from deliberately breaking the default. Instead of the obvious "AI tutor chatbot," each operator forces a different escape:
+
+  * **Asset removal** — take away the thing everyone assumes the product must have (the screen, the answer) and see what becomes possible.
+  * **Actor substitution** — swap who's doing what (the student becomes the teacher, the teacher becomes an agent).
+  * **Constraint-into-product** — turn a hard limitation into the whole point of the product (the invisibility of a student's thinking *becomes* the
+  thing you render and debug).
+
+  Turn **fun-facts mode** on and the skill injects real-world facts as creative fuel — a why-now urgency, or a mechanism transplanted from an
+  unrelated domain.
+
+  ## Session state
+
+  The skill writes all working state to a `.drl/` directory in the current project — the inputs digest, the generated ideas and scores for each
+  iteration, your feedback history, and the final winner plan. Each hackathon project keeps its own isolated session, so you can stop and resume
+  anytime.
+
+  Add `.drl/` to your project's `.gitignore`.
+
+  ```
+  .drl/
+  ├── inputs.md              # the digest: team, sponsor tech, judging frame
+  ├── iteration-01/
+  │   ├── candidates.md      # 9–15 generated ideas
+  │   ├── scores.md          # rubric scores + rejections
+  │   ├── top3.md            # the pitches you saw
+  │   └── feedback.md        # your verbatim feedback for the next round
+  ├── iteration-02/          # each reroll/iterate adds a folder
+  └── winner.md              # the locked idea + demo script + build plan
+  ```
+
+  ## FAQ
+
+  **I don't have judging criteria.** Fine — the built-in 100-point rubric is used, framed to the event. If the kickoff drops real criteria later,
+  reopen the folder and the skill re-ranks in minutes.
+
+  **I'm a solo / non-technical builder.** The skill designs around your actual strengths and, for each idea, spells out exactly what to build yourself
+  and what to recruit a teammate for — including the specific stack that person should know.
+
+  **Does it work outside Claude Code?** Yes. It uses only universal skill features, so it runs on any agent that supports `SKILL.md` skills — just
+  clone it into that agent's skills directory.
+
+  **Can I stop and come back?** Yes. Everything lives in `.drl/`, so each project resumes exactly where you left off.

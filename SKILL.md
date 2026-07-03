@@ -42,11 +42,11 @@ The user has ideally dropped files into the project folder already.
    any combination works — file paths, a folder to scan, pasted text, or a URL to the hackathon page.
    If the user just says "look in the folder," list the project files (excluding `.drl/` and hidden
    directories), infer which file is which input, and confirm your mapping with the user before reading.
-2. **Fun-facts mode (optional).** Ask the user one extra yes/no question, exactly: "Use fun facts?
-   (mixes ~20 recent high-resonance news items into idea generation as creative fuel)". Record the
-   answer in `inputs.md` under a new section `## Fun-facts mode` (on/off). Default is off if the user
-   skips the question.
-3. **Handle missing inputs:** One input file may satisfy several roles at once — e.g. a hackathon
+   End that SAME message with one extra optional line, exactly: "Optional: use fun facts? (yes/no —
+   mixes ~20 recent high-resonance news items into idea generation as creative fuel; default off)". One
+   message asks all four things and expects a single reply; record the fun-facts answer in `inputs.md`
+   under `## Fun-facts mode` (on/off), defaulting to off if the user doesn't address it.
+2. **Handle missing inputs:** One input file may satisfy several roles at once — e.g. a hackathon
    rules page that embeds the judging criteria counts as both (b) and (c). Treat an input as missing
    only if it appears in none of the provided materials.
    - No resume → instead ask 3–4 quick questions about the team: core skills, notable past projects,
@@ -55,9 +55,13 @@ The user has ideally dropped files into the project folder already.
      be used.
    - No sponsor / tech requirements → ask whether the hackathon is tech-agnostic. If it is, note that
      sponsor-centrality logic will be skipped downstream.
-4. **Invite precision.** In one friendly line, tell the user that the more precisely the team
+3. **Invite precision.** In one friendly line, tell the user that the more precisely the team
    describes itself, the sharper the generated ideas will be. Offer to accept any extra context —
    interests, constraints, and especially what they do NOT want to build.
+4. **Gate before distillation.** Do not proceed to distillation until the three base inputs are each
+   either collected or explicitly resolved as missing per the missing-input rules above. A fun-facts
+   answer alone is NOT sufficient input — if the user's reply only addresses fun-facts, re-ask for the
+   base inputs.
 5. **Distill into `.drl/inputs.md`** with these sections. Distill, don't copy — but preserve concrete
    facts and numbers:
    - `## Team` — skills, notable experience, size, stack strengths

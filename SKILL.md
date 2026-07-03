@@ -44,18 +44,14 @@ Do not read iteration contents in bulk here — read just enough to summarize.
 Goal: collect three inputs — the team, the hackathon rules / required tech, and the judging criteria.
 The user has ideally dropped files into the project folder already.
 
-1. **Ask for the inputs.** Ask in ONE interaction: (i) a short conversational line asking the user to
-   point at their input files — (a) team resume(s), (b) hackathon rules / required sponsor tech,
-   (c) judging criteria — or to say "look in the folder"; (ii) alongside it, the fun-facts yes/no as a
-   selectable option where supported (default off; it mixes ~20 recent high-resonance news items into
-   idea generation as creative fuel). Keep the total message short — details like accepted formats
-   (file paths, a folder to scan, pasted text, or a URL to the hackathon page) belong in one compact
-   line, not paragraphs. Record the fun-facts answer in `inputs.md` under `## Fun-facts mode` (on/off),
-   defaulting to off if the user doesn't address it.
+1. **Ask for the inputs.** In one short, conversational message, ask the user to point at their input
+   files — (a) team resume(s), (b) hackathon rules / required sponsor tech, (c) judging criteria — or
+   to say "look in the folder," or to paste the text. Keep it short; accepted formats (file paths, a
+   folder to scan, pasted text, or a URL to the hackathon page) fit in one compact line.
    If the user says "look in the folder," list the project files (excluding `.drl/` and hidden
    directories), infer which file is which input, then present the mapping and ask for confirmation as
-   selectable options where supported: "Mapping correct" / "Let me correct it", with the fun-facts
-   yes/no included in the same interaction if still unanswered. Confirm the mapping before reading.
+   selectable options where supported: "Mapping correct" / "Let me correct it". Confirm the mapping
+   before reading.
 2. **Handle missing inputs:** One input file may satisfy several roles at once — e.g. a hackathon
    rules page that embeds the judging criteria counts as both (b) and (c). Treat an input as missing
    only if it appears in none of the provided materials.
@@ -69,18 +65,30 @@ The user has ideally dropped files into the project folder already.
    describes itself, the sharper the generated ideas will be. Offer to accept any extra context —
    interests, constraints, and especially what they do NOT want to build.
 4. **Gate before distillation.** Do not proceed to distillation until the three base inputs are each
-   either collected or explicitly resolved as missing per the missing-input rules above. A fun-facts
-   answer alone is NOT sufficient input — if the user's reply only addresses fun-facts, re-ask for the
-   base inputs.
+   either collected or explicitly resolved as missing per the missing-input rules above.
 5. **Distill into `.drl/inputs.md`** with these sections. Distill, don't copy — but preserve concrete
    facts and numbers:
    - `## Team` — skills, notable experience, size, stack strengths
    - `## Sponsor tech / required stack` — each item plus what it actually does
    - `## Judging criteria` — the hackathon's real criteria if provided, else "default rubric"
    - `## Constraints` — time window, team-size limit, submission requirements
-   - `## Extra context` — anything else the user offered
+   - `## Extra context` — anything else the user offered, including explicit exclusions
+   - `## Idea lean` — direction preference (set in the sharpening round below)
    - `## Fun-facts mode` — on/off (default off)
-6. **Confirm.** Show the digest to the user for a quick confirm/correct before proceeding.
+6. **Sharpening questions (always).** After writing the digest and showing the quick read-back, ALWAYS
+   ask a sharpening round as ONE multi-question interaction (a multi-question form with selectable
+   options where the agent supports it; compact numbered questions in plain text otherwise). Questions,
+   each with 3–4 sensible preset options derived from the digest plus a free-text option:
+   (1) Team size & mix on the day — skip ONLY if the resume already states it unambiguously;
+   (2) Which direction should ideas lean, given the team's strengths (e.g. "play to our superpower:
+   <derived>", "classic crowd-pleaser for this event", "surprise me / mix");
+   (3) Anything you explicitly do NOT want to build (preset a few plausible exclusions derived from the
+   digest, plus free text);
+   (4) Use fun facts? (yes / no; default off) — include ONLY if not already answered earlier in the
+   conversation.
+   Fold the answers into `inputs.md` (team details, `## Idea lean` — new section, `## Extra context` /
+   exclusions, `## Fun-facts mode`) before the final confirmation.
+7. **Confirm.** Show the digest to the user for a quick confirm/correct before proceeding.
 
 ---
 
@@ -88,7 +96,7 @@ The user has ideally dropped files into the project folder already.
 
 1. Read `.drl/inputs.md`. Determine the current iteration number `N` — `01` if fresh; if this is a
    feedback loop, `N` = previous iteration + 1. Create `.drl/iteration-NN/` (zero-padded, e.g.
-   `iteration-01`).
+   `iteration-01`). Honor the `## Idea lean` preference when deriving each operator's parent direction.
 2. If this is iteration 2+, also read the previous iteration's `top3.md` and `feedback.md`. Treat the
    chosen/liked ideas and the user's feedback as seed material, and **explicitly avoid regenerating
    ideas the user rejected.** "Rejected" means ideas the user explicitly turned down or criticized —

@@ -1,6 +1,6 @@
 ---
 name: asset-removal
-description: The TRIZ asset-removal operator — delete a load-bearing atom and find a larger-market business that delivers value without it. Invoked by the dynamic-resonance-lite orchestrator during Generation, not standalone.
+description: The asset-removal operator — delete a load-bearing atom and find a larger-market business that delivers value without it. Invoked by the dynamic-resonance-lite orchestrator during Generation, not standalone.
 ---
 
 # Adapter — how to run this operator inside dynamic-resonance-lite
@@ -25,7 +25,7 @@ Required `operator_fields` on each card: `operators_applied` = `["asset_removal:
 # ORIGINAL OPERATOR (verbatim — do not edit)
 ---
 
-You are applying ONE TRIZ operator — **asset-removal** — to a parent wedge. Asset-removal is a
+You are applying ONE operator — **asset-removal** — to a parent wedge. Asset-removal is a
 mechanical move, not a tweak: you DELETE a load-bearing atom the search keeps leaning on, then find a
 business that **delivers value WITHOUT that atom** and reaches a **materially larger market**.
 
@@ -70,7 +70,7 @@ Anti-anchoring rules:
   fit is a bad trade — keep `why_this_team` real and ground demand. The full rubric judges this child;
   market size alone will NOT carry it.
 - This is a DISCONTINUOUS jump (the EVO contract): a real shift in job / mechanism / buyer, not a
-  parameter change. Pick the ЗРТС law(s) whose move the removal enables.
+  parameter change. Pick the system-evolution law(s) whose move the removal enables.
 
 ## Output
 Reply with ONLY a single JSON wedge object (the standard wedge shape provided after this prompt),

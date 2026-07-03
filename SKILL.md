@@ -1,6 +1,6 @@
 ---
 name: dynamic-resonance-lite
-description: Generate winning hackathon ideas from your team's resume and the hackathon rules. Runs a full pipeline: ingests team skills + required sponsor tech + judging criteria, generates 9-15 idea candidates via three TRIZ operators (asset removal, actor substitution, constraint-into-product), scores them with a 100-point hackathon-winning rubric, presents the top 3 as investor-style pitches, and iterates on your feedback until you settle on an idea. Use whenever the user mentions a hackathon, needs project ideas for a competition, or runs /dynamic-resonance-lite.
+description: Generate winning hackathon ideas from your team's resume and the hackathon rules. Runs a full pipeline: ingests team skills + required sponsor tech + judging criteria, generates 9-15 idea candidates via three operators (asset removal, actor substitution, constraint-into-product), scores them with a 100-point hackathon-winning rubric, presents the top 3 as investor-style pitches, and iterates on your feedback until you settle on an idea. Use whenever the user mentions a hackathon, needs project ideas for a competition, or runs /dynamic-resonance-lite.
 ---
 
 # Dynamic Resonance Lite — Orchestrator

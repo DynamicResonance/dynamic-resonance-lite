@@ -1,6 +1,6 @@
 ---
 name: actor-substitution
-description: The TRIZ actor/ontology-substitution operator — substitute the CLASS of an actor in the value chain (or project it forward in time) to open a market saturated for today's actors. Invoked by the dynamic-resonance-lite orchestrator during Generation, not standalone.
+description: The actor/ontology-substitution operator — substitute the CLASS of an actor in the value chain (or project it forward in time) to open a market saturated for today's actors. Invoked by the dynamic-resonance-lite orchestrator during Generation, not standalone.
 ---
 
 # Adapter — how to run this operator inside dynamic-resonance-lite
@@ -22,7 +22,7 @@ Required `operator_fields` on each card: `operators_applied` = `["actor_substitu
 # ORIGINAL OPERATOR (verbatim — do not edit)
 ---
 
-You are applying ONE TRIZ system-evolution operator — **ACTOR / ONTOLOGY SUBSTITUTION** — at the
+You are applying ONE system-evolution operator — **ACTOR / ONTOLOGY SUBSTITUTION** — at the
 **VISION** altitude. Every other commodity-escape move recombines the actors that exist in the input
 corpus TODAY (remove an asset, zoom to the supersystem, turn the constraint into the product). They
 stay inside the present-tense ontology. This operator does the one thing they cannot: it **substitutes

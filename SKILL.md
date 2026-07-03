@@ -79,7 +79,10 @@ The user has ideally dropped files into the project folder already.
    ask a sharpening round as ONE multi-question interaction (a multi-question form with selectable
    options where the agent supports it; compact numbered questions in plain text otherwise). Questions,
    each with 3–4 sensible preset options derived from the digest plus a free-text option:
-   (1) Team size & mix on the day — skip ONLY if the resume already states it unambiguously;
+   (1) Team size & mix on the day — ALWAYS ask, even when the resume states it clearly: preset the
+   first option to the team as understood from the inputs (e.g. "2 — Alex (backend) + Maria (frontend),
+   as in the resume") so confirming takes one click, and offer options for common changes (someone
+   can't make it / extra member joining / finding teammates at the event) plus free text;
    (2) Which direction should ideas lean, given the team's strengths (e.g. "play to our superpower:
    <derived>", "classic crowd-pleaser for this event", "surprise me / mix");
    (3) Anything you explicitly do NOT want to build (preset a few plausible exclusions derived from the

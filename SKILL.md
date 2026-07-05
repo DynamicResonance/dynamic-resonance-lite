@@ -21,7 +21,11 @@ that never blocks the pipeline). All working state lives in a
 confirm mapping, settle/iterate/reroll, yes/no), present them as selectable options if your environment
 supports presenting choices; otherwise ask in plain text. Group related questions into ONE interaction
 — never a separate turn per question. Keep free-text questions (like "point me at your files")
-conversational.
+conversational. A timed-out or auto-submitted interaction is NOT an answer. If a question tool returns
+due to timeout, expiry, or auto-continue rather than an explicit user action, do NOT proceed on those
+values: stop, state in one line that you are waiting for the user's actual choice, re-ask the same
+question, and wait. There is no time limit on waiting for the user — never advance the pipeline, start
+generation, or spend work on the user's behalf because a timer fired.
 
 ---
 
@@ -264,3 +268,6 @@ The user has ideally dropped files into the project folder already.
 - Fun facts are creative fuel, never claims: a pitch may reference the news item as context, but all
   Problem/Solution/Impact numbers still follow the estimate-framing rules and must not present the
   fact's projections as the product's own results.
+- Never treat an interaction timeout or auto-continued default as user consent. Expensive steps
+  (generation, scoring, presentation) may only start after an explicit user action on the preceding
+  question.

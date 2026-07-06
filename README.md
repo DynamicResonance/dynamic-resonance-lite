@@ -8,7 +8,7 @@ That's Dynamic Resonance. One engine maxes out the model's wildest, highest-upsi
 
 **dynamic-resonance-lite** is the open-source, hackathon-sized version, which reads your team's skills, the sponsor tech, and the judging rubric, then loops with you to a locked winner, a second-by-second demo script, and an hour-by-hour build plan. 
 
-  **Turn your team's resume and a hackathon's rules into scored, pitch-ready ideas in one command.**
+## Turn your team's resume and a hackathon's rules into scored, pitch-ready ideas in one command.**
 
   Hackathons aren't won by the best code. They're won by the right idea, a jaw-drop demo, and a story judges believe. `dynamic-resonance-lite` is a
   skill pack that does the hardest part for you: it reads your team's actual skills, the required sponsor tech, and the judging criteria, then

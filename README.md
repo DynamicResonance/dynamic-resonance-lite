@@ -1,5 +1,13 @@
 # dynamic-resonance-lite
 
+Everyone can code now, the hard question is no longer **HOW** but **WHAT** to build. That's what wins a hackathon too: not the best code, but the right idea, a demo that lands, and a story judges believe.
+
+I'm Aleh Manchuliantsau, a 7× founder — $10M+ raised, 10 patents, Techstars and SOSV alum. Planetarians (backed by AB InBev), SpyGlass AI (acquired 2025), 100%FOOD ($0→$5M in 18 months, zero outside funding), MOBYS ($0→$6M, 150 people), SOLAR-Si (spherical solar cells licensed to Roskosmos). My hardest lesson, learned twice: a moonshot with no credible route loses, and traction with no bigger picture loses, you need **both** at once.
+
+That's Dynamic Resonance. One engine maxes out the model's wildest, highest-upside ideas, the second one scores them against coded math and historical data. After it hands you go-to-market routes, each with a wedge, a probability, and a cost. That's how I generate moonshots grounded in reality. 
+
+**dynamic-resonance-lite** is the open-source, hackathon-sized version, which reads your team's skills, the sponsor tech, and the judging rubric, then loops with you to a locked winner, a second-by-second demo script, and an hour-by-hour build plan. 
+
   **Turn your team's resume and a hackathon's rules into scored, pitch-ready ideas in one command.**
 
   Hackathons aren't won by the best code. They're won by the right idea, a jaw-drop demo, and a story judges believe. `dynamic-resonance-lite` is a

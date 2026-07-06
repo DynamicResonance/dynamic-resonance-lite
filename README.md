@@ -6,16 +6,13 @@ I'm Aleh Manchuliantsau, a 7× founder — $10M+ raised, 10 patents, Techstars a
 
 That's Dynamic Resonance. One engine maxes out the model's wildest, highest-upside ideas, the second one scores them against coded math and historical data. After it hands you go-to-market routes, each with a wedge, a probability, and a cost. That's how I generate moonshots grounded in reality. 
 
+## Turn your team's resume and a hackathon's rules into scored, pitch-ready ideas in one command.
+
 **dynamic-resonance-lite** is the open-source, hackathon-sized version, which reads your team's skills, the sponsor tech, and the judging rubric, then loops with you to a locked winner, a second-by-second demo script, and an hour-by-hour build plan. 
 
-## Turn your team's resume and a hackathon's rules into scored, pitch-ready ideas in one command.**
+It's skill pack that does the hardest part for you: it reads your team's actual skills, the required sponsor tech, and the judging criteria, then generates candidate ideas, scores every one against a 100-point win-the-hackathon rubric, presents the top 3 as investor-style pitches, and loops with you until you lock the one you want to build. 
 
-  Hackathons aren't won by the best code. They're won by the right idea, a jaw-drop demo, and a story judges believe. `dynamic-resonance-lite` is a
-  skill pack that does the hardest part for you: it reads your team's actual skills, the required sponsor tech, and the judging criteria, then
-  generates candidate ideas, scores every one against a 100-point win-the-hackathon rubric, presents the top 3 as investor-style pitches, and loops
-  with you until you lock the one you want to build — ending with a second-by-second demo script and an hour-by-hour build plan.
-
-  It's a single `SKILL.md` file. No dependencies, no accounts, no code to run. Install it, drop your files in a folder, and type one command.
+It's a single `SKILL.md` file. No dependencies, no accounts, no code to run. Install it, drop your files in a folder, and type one command.
 
   ## Who this is for
 

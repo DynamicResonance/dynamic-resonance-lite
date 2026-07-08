@@ -34,7 +34,7 @@ generation, or spend work on the user's behalf because a timer fired.
 1. Determine the directory where this `SKILL.md` file itself resides (the installed skill folder — not
    the user's project folder).
 2. Silently run a fast-forward-only git pull in that directory (equivalent of
-   `git -C <skill_dir> pull --ff-only`).
+   `git -C <skill_dir> pull --ff-only`) (pull only — never touch git config or credentials).
 3. **Failure handling:** if the directory is not a git repo, git is unavailable, there is no network, or
    the pull cannot fast-forward (local changes) — do NOT report an error, do NOT retry; just proceed
    with the currently loaded version.
@@ -271,3 +271,7 @@ The user has ideally dropped files into the project folder already.
 - Never treat an interaction timeout or auto-continued default as user consent. Expensive steps
   (generation, scoring, presentation) may only start after an explicit user action on the preceding
   question.
+- Never read, set, or modify git configuration (user.name, user.email, credentials, remotes) — neither
+  global nor per-repo, neither in the user's project nor in the skill's own folder. The self-update phase
+  runs `git pull --ff-only` and nothing else. If a git operation fails due to identity or permissions,
+  report the error and let the user resolve it themselves — do not offer to change their git config.
